@@ -45,7 +45,7 @@ Optional `agents/` (payments-engineer, compliance-reviewer) and `commands/`
 
 ```bash
 # Minimal — installs to ~/.claude/skills/
-git clone https://github.com/<you>/solana-payments-skill && cd solana-payments-skill && ./install.sh
+git clone https://github.com/Blessed-Shammah/solana-payments && cd solana-payments && ./install.sh
 
 # Interactive — choose personal / project / custom location
 ./install-custom.sh

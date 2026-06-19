@@ -22,11 +22,14 @@
 
 | Thing | What to use | Source |
 |-------|-------------|--------|
-| JS/TS SDK | `@solana/kit` (functional successor to web3.js v1; `createSolanaRpc`, `createSolanaRpcSubscriptions`) | github.com/anza-xyz/kit; npmjs.com/package/@solana/kit |
+| JS/TS SDK | `@solana/kit` (v5.x; functional, tree-shakeable successor to legacy `@solana/web3.js`; `createSolanaRpc`, `createSolanaRpcSubscriptions`) | github.com/anza-xyz/kit; npmjs.com/package/@solana/kit |
 | SPL token instructions | `@solana-program/token` + `@solana-program/token-2022` | anza-xyz, npm |
 | Payment request format | Solana Pay spec — `solana:<recipient>?amount&spl-token&reference&label&message&memo` | docs.solanapay.com/spec; github.com/solana-foundation/solana-pay |
-| Reconciliation primitive | `reference` = base58 pubkey attached as read-only non-signer key; index via `getSignaturesForAddress(reference)` | Solana Pay SPEC.md |
-| Webhooks / indexing | Helius webhooks + Enhanced Transactions API | helius.dev/docs |
+| Reconciliation primitive | `reference` = base58 pubkey attached as read-only non-signer key; index via `getSignaturesForAddress(reference)` | Solana Pay SPEC.md; solana.com/docs/rpc/http/getsignaturesforaddress |
+| ⚠️ `@solana/pay` helper caveat | `validateTransfer`/`findReference` has a documented edge case that could validate multiple transfers — verify the tx yourself | advisories.gitlab.com/pkg/npm/@solana/pay |
+| Token-2022 extensions | check **transfer-fee** (received < sent) and **transfer-hook** (mandatory CPI per transfer) before trusting amount/compute | spl.solana.com / Token-2022 docs |
+| Confirmation reality | `processed` droppable; ~5% of blocks land on abandoned forks; **Alpenglow** drives finality toward ~150 ms but commitment-by-value discipline still applies | solana.com/developers/guides/advanced/confirmation; helius.dev/blog/solana-commitment-levels |
+| Webhooks / indexing | Helius webhooks (verify signing secret) + Enhanced Transactions API | helius.dev/docs |
 | Multisig treasury | Squads protocol | docs.squads.so |
 | Local testing | Surfpool (mainnet-fork) + LiteSVM/Mollusk; `solana-test-validator` for devnet-like | anza, surfpool docs |
 

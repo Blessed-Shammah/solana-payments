@@ -31,8 +31,12 @@ in-game `payments.md` covers game economies only).
 | `compliance.md` | Sanctions screening hook, record-keeping (legal layer → `crypto-legal` skill) |
 | `treasury.md` | Sweeping, Squads multisig, settlement, stablecoin handling |
 | `testing.md` | Devnet + mainnet-fork, simulating payers, assertion patterns |
+| `myths.md` | 5 payment myths that cause real losses, debunked |
 | `resources.md` | Verified mints, SDKs, specs + their sources |
 | `rules/payments.md` | Auto-loading **safety laws** (the heart of the skill) |
+
+Focused references live in `skill/references/` (loaded on demand); `skill/SKILL.md` is the routing
+hub. Run it as a slash command: `/solana-payments`.
 
 Optional `agents/` (payments-engineer, compliance-reviewer) and `commands/`
 (`/scaffold-checkout`, `/reconcile`).
@@ -75,11 +79,15 @@ git clone https://github.com/<you>/solana-payments-skill && cd solana-payments-s
 ## Repository structure
 
 ```
-skill/        SKILL.md hub + focused references (progressive disclosure)
-rules/        payments.md — safety laws, auto-loaded on payment code
-agents/       optional specialized agents
-commands/     optional workflow commands
-_agent/       how this skill was built (planning package — not shipped context)
+skill/
+  SKILL.md          routing hub (frontmatter + one-primary-per-task table)
+  references/       focused single-topic files, loaded on demand
+rules/              payments.md — safety laws, auto-loaded on payment code
+agents/             payments-engineer, compliance-reviewer, payments-reviewer
+commands/           /scaffold-checkout, /reconcile
+examples/           payments-core — runnable safety tests (node --test, 9/9 passing)
+.github/workflows/  ci.yml — tests + integrity guards on every push
+_agent/             how this skill was built (planning + review package — not shipped context)
 ```
 
 ## Development workflow

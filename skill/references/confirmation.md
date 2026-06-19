@@ -14,6 +14,11 @@ Obeys Safety Laws #2, #3, #4.
 **Pick a threshold by value.** Digital good for $5 → `confirmed`. Releasing $5,000 to fiat →
 `finalized`. State the threshold in code; don't leave it implicit (Safety Law #4).
 
+> **2026 reality (Alpenglow):** Solana's Alpenglow consensus upgrade drives finality toward
+> ~150 ms, so `finalized` is far cheaper to wait for than it used to be — but *faster finality does
+> not remove the discipline*. `processed` is still droppable; you still pick a commitment by value
+> and still verify the transfer. Speed changed; the rule didn't.
+
 ## Find the paying transaction via `reference`
 
 You don't wait for the client to report a signature — you discover it:
@@ -37,12 +42,17 @@ if (!tx || tx.meta?.err) return { status: "pending" };
 
 ## Verify the transfer — do NOT trust that the tx exists
 
-A transaction touching your reference is necessary, not sufficient. Verify, by inspecting the token
-balance deltas (`meta.preTokenBalances` / `postTokenBalances`):
+A transaction touching your reference is necessary, not sufficient. **Verify it yourself** from the
+on-chain transaction — do not lean on a library helper alone. (The `@solana/pay` `validateTransfer`
+/ `findReference` path has a documented edge case where validation could accept multiple transfers;
+your own balance-delta check is the authority.) Inspect the token balance deltas
+(`meta.preTokenBalances` / `postTokenBalances`):
 
 1. **Mint** matches the invoice mint (Safety Law #2) — and the owning token program.
 2. **Recipient** is your `merchantAta` (the merchant's ATA for that mint).
-3. **Amount** received ≥ `expectedBaseUnits` (decimals from the mint, Safety Law #3).
+3. **Amount** received ≥ `expectedBaseUnits` (decimals from the mint, Safety Law #3). Because this
+   measures what *actually landed* in the merchant ATA, it is automatically correct for Token-2022
+   **transfer fees** — set `expectedBaseUnits` net-of-fee, never to the gross requested amount.
 4. (Optional) memo / payer constraints if your flow requires them.
 
 ```ts

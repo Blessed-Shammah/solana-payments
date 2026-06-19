@@ -24,9 +24,10 @@ jobs:
       - name: SKILL.md routes resolve
         run: |
           set -e
+          test -f "skill/SKILL.md" || { echo "missing skill/SKILL.md"; exit 1; }
           for f in rails solana-pay checkout subscriptions confirmation reconciliation \
-                   refunds-disputes onramp-offramp compliance treasury testing resources; do
-            test -f "skill/$f.md" || { echo "missing skill/$f.md"; exit 1; }
+                   refunds-disputes onramp-offramp compliance treasury testing resources myths; do
+            test -f "skill/references/$f.md" || { echo "missing skill/references/$f.md"; exit 1; }
           done
           echo "all routes resolve"
       - name: No committed private keys
